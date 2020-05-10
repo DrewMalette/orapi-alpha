@@ -1,7 +1,7 @@
 # entrytemplate.py
 
 import pygame
-import orapi
+import api
 
 # put segment functions here
 def segment_template(scene):
@@ -18,12 +18,15 @@ segments = locals() # so segment functions can be passed to a scene
 def run():
 
 	pygame.init()
+	
+	globs = globals()
+	for g in globs: print(g, globs[g])
 
-	game = orapi.Game("0.2")
+	game = api.graphics.Game()
 	# define title image and ui components here
 	
 	# define your player
-	game.player = orapi.Mob(game, image, uid)
+	game.player = api.graphics.Mob(game, image, uid)
 	# load up a scene; TODO need a reset function for a scene
 	game.load_scene(name_the_scene, segments, mapfile, segment_string)
 	# switch game state to the title card
