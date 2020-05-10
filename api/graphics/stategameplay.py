@@ -51,7 +51,7 @@ class State_Gameplay:
 		self.game.terrain_renderer.render()
 		self.game.display.blit(self.game.fader.curtain,(0,0))
 		if self.game.fader.faded_out:
-			self.game.title_music.fadeout(800)
+			self.game.music_tracks["titletrack"].fadeout(800)
 			self.game.switch_state("title")
 
 	def menu(self): pass	

@@ -8,6 +8,8 @@ from . import utilities
 from . import statetitle
 from . import stategameplay
 
+# the real machinery is going to be here, to be invoked by scripts
+
 class Game:
 
 	fps = 60
@@ -34,7 +36,7 @@ class Game:
 		
 		self.ui_font = pygame.font.Font(None, 24)
 				
-		self.title_music = None
+		self.music_tracks = {}
 		
 	def switch_state(self, state_uid): # load and start
 	

@@ -27,7 +27,7 @@ class State_Title:
 		self.ending = False
 	
 		self.game.ui["titleselect"].start()
-		self.game.title_music.play()
+		self.game.music_tracks["titletrack"].play()
 		# TODO put music into dictionary; self.music = self.game.music["track1"]
 		
 		self.sub_state = "fade_in"
@@ -48,7 +48,7 @@ class State_Title:
 				self.sub_state = "fade_out"
 				self.game.fader.fade_out()
 			elif self.game.ui["titleselect"].value == 1:
-				self.game.title_music.fadeout(1000)
+				self.game.music_tracks["titletrack"].fadeout(1000)
 				self.sub_state = "ending"
 				self.game.fader.fade_out()
 		self.game.display.blit(self.title_card, (0,0))
