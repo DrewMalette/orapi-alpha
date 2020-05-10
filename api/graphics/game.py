@@ -3,8 +3,6 @@ import pygame
 from . import mob
 from . import scene
 from . import terrain
-from . import uidialogue
-from . import uiselect
 from . import utilities
 
 from . import statetitle
@@ -23,9 +21,7 @@ class Game:
 		self.terrain_renderer = Terrain_Renderer("terrend", self)
 		
 		self.ui = {}
-		self.ui["dialoguebox"] = uidialogue.UI_Dialogue("dialoguebox", self, (170,360), (300,100))
-		self.ui["titleselect"] = uiselect.UI_Select("titleselect", self, (245,300), (150,54), ["Get Cucked", "Quit to Desktop"])
-	
+			
 		self.controller = Keyboard(self)
 		self.state = ""
 		self.states = { "gameplay": stategameplay.State_Gameplay(self), "title": statetitle.State_Title(self) }
@@ -38,10 +34,8 @@ class Game:
 		
 		self.ui_font = pygame.font.Font(None, 24)
 				
-		# do some loading shit here
-		self.title_music = pygame.mixer.Sound("content/sound/ccsong.ogg")
-		#load_func(self)
-
+		self.title_music = None
+		
 	def switch_state(self, state_uid): # load and start
 	
 		self.state = state_uid

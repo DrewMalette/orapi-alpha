@@ -2,8 +2,9 @@ import pygame
 
 # today's goals
 # - rework the naming conventions in this file
-# - rework so that the states are defined in the entrypoint script
-# - reorganize the whole thing
+# - TODO rework so that the states are defined in the entrypoint script (UI, too) TODO
+# - reorganize the whole thing [done]
+# separate Terrain from Scene?
 
 class State_Title:
 
@@ -11,9 +12,9 @@ class State_Title:
 		
 		self.game = game
 		
-		self.title_card = pygame.image.load("content/image/cctitle.png") # some sort of splash screen, like with Brandlogo
+		self.title_card = pygame.image.load("content/image/cctitle.png")
 				
-		self.sub_state = "in_play" #None
+		self.sub_state = ""
 		self.sub_states = { "fade_in": self.fade_in,
 							"fade_out": self.fade_out,
 							"title_options": self.title_options,

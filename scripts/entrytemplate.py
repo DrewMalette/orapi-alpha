@@ -14,6 +14,7 @@ def segment_template(scene):
 	# render necessary components
 
 segments = locals() # so segment functions can be passed to a scene
+# maybe I'll just make the dictionary myself, by hand
 
 def run():
 
