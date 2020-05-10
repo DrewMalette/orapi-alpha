@@ -36,7 +36,7 @@ class State_Title:
 	def fade_in(self):
 	
 		self.game.fader.update()
-		self.game.display.blit(self.title_card, (0,0))
+		self.game.display.blit(self.game.title_card, (0,0))
 		self.game.display.blit(self.game.fader.curtain,(0,0))
 		if self.game.fader.faded_in: self.sub_state = "title_options"
 	
@@ -51,7 +51,7 @@ class State_Title:
 				self.game.music_tracks["titletrack"].fadeout(1000)
 				self.sub_state = "ending"
 				self.game.fader.fade_out()
-		self.game.display.blit(self.title_card, (0,0))
+		self.game.display.blit(self.game.title_card, (0,0))
 		self.game.ui["titleselect"].render()
 		#self.game.display.blit(self.game.fader.curtain, (0,0))
 	

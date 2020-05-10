@@ -15,15 +15,13 @@ class Game:
 	fps = 60
 	display_size = (640,480)
 
-	def __init__(self):
+	def __init__(self, title_image_file):
 	
 		pygame.display.set_caption("open rhombus")
 		self.display = pygame.display.set_mode(self.display_size)
 		self.fader = Fader(self, self.display.get_size())
 		self.terrain_renderer = Terrain_Renderer("terrend", self)
 		
-		self.ui = {}
-			
 		self.controller = Keyboard(self)
 		self.state = ""
 		self.states = { "gameplay": stategameplay.State_Gameplay(self), "title": statetitle.State_Title(self) }
@@ -31,11 +29,13 @@ class Game:
 		self.clock = pygame.time.Clock()
 		self.tick = 0
 		
+		self.segment = None
 		self.player = None
 		self.scene = None
 		
+		self.ui = {}
 		self.ui_font = pygame.font.Font(None, 24)
-				
+		self.title_card = pygame.image.load(title_image_file)
 		self.music_tracks = {}
 		
 	def switch_state(self, state_uid): # load and start
@@ -76,7 +76,8 @@ class Game:
 		self.tick = (self.tick + 1) % 4294967296
 		pygame.event.pump()
 		self.controller.update(pygame.key.get_pressed())
-		self.states[self.state].update()
+		self.segment(self)
+		#self.states[self.state].update()
 		pygame.display.flip()
 		
 	def render(self):
