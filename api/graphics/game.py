@@ -5,7 +5,7 @@ from . import scene
 from . import terrain
 from . import utilities
 
-from . import statetitle
+from . import statetitle # these will be omitted
 from . import stategameplay
 
 # the real machinery is going to be here, to be invoked by scripts
@@ -23,15 +23,14 @@ class Game:
 		self.terrain_renderer = Terrain_Renderer("terrend", self)
 		
 		self.controller = Keyboard(self)
-		self.state = ""
-		self.states = { "gameplay": stategameplay.State_Gameplay(self), "title": statetitle.State_Title(self) }
-		
+				
 		self.clock = pygame.time.Clock()
 		self.tick = 0
 		
 		self.segment = None
 		self.player = None
 		self.scene = None
+		self.terrain = None
 		
 		self.ui = {}
 		self.ui_font = pygame.font.Font(None, 24)

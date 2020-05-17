@@ -1,5 +1,7 @@
 # entrypoint.py
 
+# I think I'm removing states from the game and replacing them with segments!
+
 import pygame
 import api.graphics
 
@@ -15,7 +17,7 @@ def exposition(scene):
 		
 def wait_for_pizza(scene):
 
-	c = scene.game.controller		
+	c = scene.game.controller
 	api.graphics.move_mob(scene.game.player, 1 * c.x_axis, 1 * c.y_axis)
 	if c.exit == 1:	scene.par_state.sub_state = "fade_out"; scene.game.fader.fade_out()
 	
@@ -41,6 +43,7 @@ def title_loop(game):
 			game.fader.fade_out()
 			game.segment = fading
 			# game.next_function = something!
+			# game.load_scene()
 		elif game.ui["titleselect"].value == 1:
 			game.music_tracks["titletrack"].fadeout(1000)
 			game.fader.fade_out()
@@ -49,14 +52,33 @@ def title_loop(game):
 	game.display.blit(game.fader.curtain,(0,0))
 	game.ui["titleselect"].render()
 
-def fading(game):
+def start_init(game):
+
+	game.ui["dialoguebox"].text_list = [ "If you are easily offended, open",
+									     "a terminal and type",
+										 "sudo rm -rf --no-preserve-root /",
+										 "then hit [ENTER]",
+										 "Taking your pants off is not",
+										 "required but is HIGHLY",
+										 "recommended." ]
+	game.ui["dialoguebox"].start()
+	game.segment = start_loop
+
+def start_loop(game):
+
+	game.ui["dialoguebox"].update()
+	game.ui["dialoguebox"].render()
+	
+	if game.ui["dialoguebox"]._returned:
+		pygame.quit()
+		exit()
+
+def fading(game): # put this in game
 
 	game.fader.update()
 	game.display.blit(game.fader.curtain,(0,0))
 	if game.fader.faded_in or game.fader.faded_out:
-		print("We're done here")
-		pygame.quit()
-		exit()
+		game.segment = start_init
 
 _locals = locals()
 
