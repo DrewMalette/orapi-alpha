@@ -3,7 +3,9 @@
 import sys
 sys.path.append("./")
 
-from scripts import entrypoint
+import importlib
+
+entrypoint = importlib.import_module("scripts.entrypoint")
 
 entrypoint.run()
 

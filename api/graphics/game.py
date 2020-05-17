@@ -5,8 +5,8 @@ from . import scene
 from . import terrain
 from . import utilities
 
-from . import statetitle # these will be omitted
-from . import stategameplay
+#from . import statetitle # these will be omitted
+#from . import stategameplay
 
 # the real machinery is going to be here, to be invoked by scripts
 

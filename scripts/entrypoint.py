@@ -57,7 +57,7 @@ def start_init(game):
 	game.ui["dialoguebox"].text_list = [ "If you are easily offended, open",
 									     "a terminal and type",
 										 "sudo rm -rf --no-preserve-root /",
-										 "then hit [ENTER]",
+										 "then hit [ENTER]", " ", " ",
 										 "Taking your pants off is not",
 										 "required but is HIGHLY",
 										 "recommended." ]
