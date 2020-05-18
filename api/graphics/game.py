@@ -5,9 +5,6 @@ from . import scene
 from . import terrain
 from . import utilities
 
-#from . import statetitle # these will be omitted
-#from . import stategameplay
-
 # the real machinery is going to be here, to be invoked by scripts
 
 class Game:
@@ -26,6 +23,8 @@ class Game:
 				
 		self.clock = pygame.time.Clock()
 		self.tick = 0
+		
+		self.obj_stack = [] # either a pygame.Surface or an object with a render method
 		
 		self.segment = None
 		self.player = None
@@ -64,7 +63,9 @@ class Game:
 	
 		self.running = True
 		
-		while self.running: self.update()
+		while self.running:
+			self.update()
+			self.render()
 			
 		pygame.quit()
 		exit()
@@ -75,16 +76,28 @@ class Game:
 		self.tick = (self.tick + 1) % 4294967296
 		pygame.event.pump()
 		self.controller.update(pygame.key.get_pressed())
-		self.segment(self)
-		#self.states[self.state].update()
-		pygame.display.flip()
+		for obj in self.obj_stack:
+			if getattr(obj, "update", None):
+				obj.update()
+		self.segment(self) # deals with the logic
+		
+		#print(self.obj_stack)
+		
+		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_RETURN:
+					for obj in self.obj_stack:
+						print(obj)
 		
 	def render(self):
 	
-		#self.display.blit(self.camera.canvas,(0,0))
-		#self.ui.blit(self.display)
-		pass
-			
+		for obj in self.obj_stack:
+			if getattr(obj, "render", None):
+				obj.render()
+			else:
+				self.display.blit(obj, (0,0))
+		pygame.display.flip()
+					
 class Controller:
 
 	def __init__(self, game):
@@ -289,6 +302,7 @@ class Fader: # TODO make a white version
 	
 		self.speed = speed
 		self.opacity = 0
+		self.curtain.set_alpha(self.opacity)
 		self.fading = True
 		self.velocity = self.speed
 		
@@ -296,6 +310,7 @@ class Fader: # TODO make a white version
 		
 		self.speed = speed
 		self.opacity = 255
+		self.curtain.set_alpha(self.opacity)
 		self.fading = True
 		self.velocity = -self.speed
 				
@@ -319,4 +334,8 @@ class Fader: # TODO make a white version
 
 			if self.faded_in or self.faded_out:
 				self.fading = False
+				
+	def render(self):
+	
+		self.game.display.blit(self.curtain,(0,0))
 

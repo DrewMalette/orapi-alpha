@@ -1,7 +1,5 @@
 # entrypoint.py
 
-# I think I'm removing states from the game and replacing them with segments!
-
 import pygame
 import api.graphics
 
@@ -26,33 +24,39 @@ def wait_for_pizza(scene):
 	scene.game.terrain_renderer.render()
 	scene.game.ui["dialoguebox"].render()
 
-def title_init(game):
+def title_init(game): # inits always clear game.obj_stack
+
+	game.obj_stack = []
+	game.obj_stack.append(game.title_card)
+	game.obj_stack.append(game.fader)
+	game.obj_stack.append(game.ui["titleselect"])
 		
 	game.ui["titleselect"].start()
-	game.music_tracks["titletrack"].play()
-		
+	game.music_tracks["titletrack"].play()		
 	game.fader.fade_in()
+	
 	game.segment = title_loop
 	
 def title_loop(game):
 
-	game.fader.update()
-	game.ui["titleselect"].update()
 	if game.ui["titleselect"]._returned:
 		if game.ui["titleselect"].value == 0:
 			game.fader.fade_out()
-			game.segment = fading
+			game.segment = fade_next
 			# game.next_function = something!
 			# game.load_scene()
 		elif game.ui["titleselect"].value == 1:
 			game.music_tracks["titletrack"].fadeout(1000)
 			game.fader.fade_out()
-			game.segment = fading
-	game.display.blit(game.title_card, (0,0))
-	game.display.blit(game.fader.curtain,(0,0))
-	game.ui["titleselect"].render()
+			game.segment = fade_quit
+		game.ui["titleselect"].visible = False
+		
+		
 
-def start_init(game):
+def start_init(game): # think of a better word than "start"
+
+	game.obj_stack = []
+	game.obj_stack.append(game.ui["dialoguebox"])
 
 	game.ui["dialoguebox"].text_list = [ "If you are easily offended, open",
 									     "a terminal and type",
@@ -66,19 +70,18 @@ def start_init(game):
 
 def start_loop(game):
 
-	game.ui["dialoguebox"].update()
-	game.ui["dialoguebox"].render()
-	
 	if game.ui["dialoguebox"]._returned:
 		pygame.quit()
 		exit()
 
-def fading(game): # put this in game
+# TODO ODD ONE OUT TODO ODD ONE OUT TODO
+def fade_next(game): # put this in game?
 
-	game.fader.update()
-	game.display.blit(game.fader.curtain,(0,0))
-	if game.fader.faded_in or game.fader.faded_out:
-		game.segment = start_init
+	if game.fader.faded_out: game.segment = start_init
+	
+def fade_quit(game):
+
+	if game.fader.faded_out: pygame.quit(); exit()
 
 _locals = locals()
 
