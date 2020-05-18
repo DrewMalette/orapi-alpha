@@ -1,6 +1,7 @@
 # entrypoint.py
 
 # this is a comment test. I hope I don't swear
+# it's fine
 
 import pygame
 import api.graphics
