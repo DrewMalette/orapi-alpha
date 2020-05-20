@@ -4,7 +4,9 @@ dice = lambda d: int(rnd() * d) + 1
 
 class StatBlock:
 
-	def __init__(self, bod, mnd, spi, level=1):
+	def __init__(self, mob, bod, mnd, spi, level=1):
+	
+		mob.statblock = self
 	
 		self.level = level
 		self.body = bod
