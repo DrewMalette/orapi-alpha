@@ -7,16 +7,15 @@
 # create a Dialogue box then access it?
 # then they need uids again
 
-from .mob import * # why do i need this?
-			
+from .mob import *
+from .terrain import *
+
 class Scene:
 
-	def __init__(self, uid, game, script_locals, segment):
+	def __init__(self, uid, game, terfile):
 	
 		self.uid = uid
 		self.game = game
-		
-		self.par_state = self.game.states["gameplay"]
 		
 		self.mobs = {}
 		self.live_mobs = {}
@@ -25,15 +24,7 @@ class Scene:
 		self.furniture = {}
 		self.loot = {}
 		
-		self.script_locals = {}
-		self.script_locals.update(script_locals)
-		
-		#self.segment = ""
-		#self.segments = {}
-		self.segment = segment
-		#self.segments = {"ExpoDump": scene1_expo_dump, "Wait4Za": wait_for_pizza }
-
-		self.terrain = None
+		self.terrain = Terrain(terfile, game, self)
 
 	def add_mob(self, mob):
 	
@@ -41,8 +32,10 @@ class Scene:
 		
 	def update(self):
 		
-		self.script_locals[self.segment](self)
-	
 		for mob in self.live_mobs.values():	base_update(mob)
+		self.game.terrain_renderer.update()
+		
+	def render(self):
+	
+		self.game.terrain_renderer.render()
 
-#print(locals())

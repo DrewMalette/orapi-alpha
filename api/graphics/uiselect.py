@@ -35,13 +35,10 @@ class UI_Select(object):
 		self._returned = 0
 	
 		if self.visible:
-			y_axis = self.game.controller.y_axis_sr
-			button_a = self.game.controller.as_button
-		
-			if y_axis != 0:			
+			if self.game.controller.y_axis_sr != 0:			
 				self.value = (self.value + y_axis) % len(self.labels)
 				
-			if button_a == 1:
+			if self.game.controller.as_button == 1:
 				self.stop()
 				#list(self.tDict.values())[self.value]()
 				

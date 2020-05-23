@@ -3,6 +3,27 @@
 import pygame
 import api.graphics
 
+	
+def newgame_init(game):
+
+	game.load_scene("scene1", "content/terrain/cclivrm.tmx")
+	
+	game.obj_stack = []
+	game.obj_stack.append(game.scene)
+	game.obj_stack.append(game.fader)
+	
+	game.terrain_renderer.following = game.player
+	
+	game.fader.fade_in()
+	
+	game.segment = newgame_loop # eventually, newgame will not have a loop
+	
+def newgame_loop(game):
+
+	api.graphics.move_mob(game.player, game.controller.x_axis, game.controller.y_axis)
+	
+	if game.controller.exit: pygame.quit(); exit()	
+
 def title_init(game): # inits always clear game.obj_stack
 
 	game.obj_stack = []
@@ -48,8 +69,7 @@ def start_init(game): # think of a better word than "start"
 def start_loop(game):
 
 	if game.ui["dialoguebox"]._returned:
-		pygame.quit()
-		exit()
+		newgame_init(game)
 
 def fade_next(game): # put this in game?
 

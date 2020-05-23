@@ -5,8 +5,6 @@ from . import scene
 from . import terrain
 from . import utilities
 
-# the real machinery is going to be here, to be invoked by scripts
-
 class Game:
 
 	fps = 60
@@ -41,10 +39,9 @@ class Game:
 		self.state = state_uid
 		self.states[self.state].start()
 
-	def load_scene(self, uid, script_locals, terrain_filename, segment):
+	def load_scene(self, uid, terfile):
 		
-		self.scene = scene.Scene(uid, self, script_locals, segment)
-		terrain.Terrain(terrain_filename, self, self.scene) # automatically sets self.scene.terrain to instance
+		self.scene = scene.Scene(uid, self, terfile)
 		self.terrain_renderer.scene = self.scene
 		self.terrain_renderer.following = self.player
 		# assumes the tile is square
@@ -79,9 +76,7 @@ class Game:
 		for obj in self.obj_stack:
 			if getattr(obj, "update", None):
 				obj.update()
-		self.segment(self) # deals with the logic
-		
-		#print(self.obj_stack)
+		self.segment(self) # script
 		
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
@@ -197,7 +192,6 @@ class Terrain_Renderer(pygame.Rect):
 		self.rows = 0
 		self.blank = None
 		self.following = None
-		self.scene = None
 		
 	def tile_prep(self, layer, col, row):
 
@@ -232,13 +226,13 @@ class Terrain_Renderer(pygame.Rect):
 		elif y <= self.h / 2:
 			self.y = 0
 	
-		if self.x + self.w > self.scene.terrain.cols * self.tilesize:
-			self.x = self.scene.terrain.cols * self.tilesize - self.w
+		if self.x + self.w > self.game.scene.terrain.cols * self.tilesize:
+			self.x = self.game.scene.terrain.cols * self.tilesize - self.w
 		elif self.x < 0:
 			self.x = 0
 			
-		if self.y + self.h > self.scene.terrain.rows * self.tilesize:
-			self.y = self.scene.terrain.rows * self.tilesize - self.h
+		if self.y + self.h > self.game.scene.terrain.rows * self.tilesize:
+			self.y = self.game.scene.terrain.rows * self.tilesize - self.h
 		elif self.y < 0:
 			self.y = 0
 				
@@ -272,9 +266,9 @@ class Terrain_Renderer(pygame.Rect):
 		#	for loot in self.scene.loot.values():
 		#		loot.render(self.game.display, x_offset = -self.x, y_offset = -self.y)
 
-		if self.scene.live_mobs: # draw the sprites
+		if self.game.scene.live_mobs: # draw the sprites
 			#for sprite in self.scene.sprites.values():
-			for sprite in utilities.y_sort(self.scene.live_mobs.values()):
+			for sprite in utilities.y_sort(self.game.scene.live_mobs.values()):
 				mob.render(sprite, self.game.display, x_offset = -self.x, y_offset = -self.y)
 		
 		for row in range(self.rows): # draw the top layer
