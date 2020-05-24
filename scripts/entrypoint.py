@@ -2,7 +2,6 @@
 
 import pygame
 import api.graphics
-
 	
 def newgame_init(game):
 
@@ -86,7 +85,7 @@ def run():
 	game.ui["dialoguebox"] = api.graphics.UI_Dialogue("dialoguebox", game, (170,360), (300,100))
 	game.ui["titleselect"] = api.graphics.UI_Select("titleselect", game, (245,300), (150,54), ["Get Cucked", "Quit to Desktop"])
 	game.music_tracks["titletrack"] = pygame.mixer.Sound("content/sound/ccsong.ogg")
-	game.player = api.graphics.Mob(game, "content/image/mob_jon.png", "Jon")
+	game.player = api.graphics.Mob(game, "content/image/jontest.png", "Jon")
 	title_init(game)
 	game.main()
 
