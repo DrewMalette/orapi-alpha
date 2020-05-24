@@ -32,7 +32,7 @@ def title_init(game): # inits always clear game.obj_stack
 	game.obj_stack.append(game.ui["titleselect"])
 		
 	game.ui["titleselect"].start()
-	game.music_tracks["titletrack"].play()		
+	#game.music_tracks["titletrack"].play()		
 	game.fader.fade_in()
 	
 	game.segment = title_loop

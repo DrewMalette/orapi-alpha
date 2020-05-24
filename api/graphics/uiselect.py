@@ -36,7 +36,7 @@ class UI_Select(object):
 	
 		if self.visible:
 			if self.game.controller.y_axis_sr != 0:			
-				self.value = (self.value + y_axis) % len(self.labels)
+				self.value = (self.value + self.game.controller.y_axis_sr) % len(self.labels)
 				
 			if self.game.controller.as_button == 1:
 				self.stop()
