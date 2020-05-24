@@ -214,7 +214,7 @@ class Terrain_Renderer(pygame.Rect):
 			
 	def update(self):
 	
-		x,y = mob.get_centre(self.following)
+		x,y = self.following.get_centre()
 		
 		if x > self.w / 2:
 			self.x = x - self.w / 2

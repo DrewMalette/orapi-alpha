@@ -3,8 +3,6 @@ import pygame
 #from .mechanics import StatBlock
 from . import utilities #import load_mob_sprite
 
-get_centre = lambda mob: ((mob.x + (mob.w / 2)), (mob.y + (mob.h / 2)))
-
 # put other stuff here
 
 heading = { (0,-1): "north", (0,1): "south", (-1,0): "west", (1,0): "east",
