@@ -69,63 +69,67 @@ class Mob(pygame.Rect): # incarnation of the 'Sprite' concept
 	
 		del self.scene.live_mobs[self.name]
 		
-def place(mob, col, row):
-	
-	mob.x = col * mob.scene.tilesize + (mob.scene.tilesize - mob.w) / 2
-	mob.y = row * mob.scene.tilesize + (mob.scene.tilesize - mob.h) - 4
-
-def collision(mob, x_axis, y_axis):
-
-	for c in range(4):
-		xm = ((mob.x + x_axis * mob.speed) + (c % 2) * mob.w)
-		ym = ((mob.y + y_axis * mob.speed) + int(c / 2) * mob.h)
-
-		col = int(xm / mob.scene.terrain.tilesize) # is this slow?
-		row = int(ym / mob.scene.terrain.tilesize)
-
-		if mob.scene.terrain.get_tile("collide", col, row) != "0":
-			return True
-
-	for sprite in mob.scene.live_mobs.values():
-		if sprite is not mob:
-			xm = mob.speed * x_axis + mob.x
-			ym = mob.speed * y_axis + mob.y
-			if sprite.colliderect((xm, ym, mob.w, mob.h)):
-				return True
-	return False
-	
-	
-def move_mob(mob, x_axis, y_axis):
-
-	x = (not collision(mob, x_axis * mob.speed, 0)) * (x_axis * mob.speed)
-	y = (not collision(mob, 0, y_axis * mob.speed)) * (y_axis * mob.speed)
-	mob.move_ip(x*mob.moving, y*mob.moving)
-	if x_axis != 0 or y_axis != 0: mob.facing = heading[(x_axis,y_axis)]
+	def place(self, col, row):
 		
-def base_update(mob):
+		self.x = col * self.scene.tilesize + (self.scene.tilesize - self.w) / 2
+		self.y = row * self.scene.tilesize + (self.scene.tilesize - self.h) - 4
 
-	# mob.statblock.upkeep()
-	mob.moving = bool(mob.game.controller.x_axis or mob.game.controller.y_axis)	
-	mob.frame += mob.moving & (mob.game.tick % 12 == 0) * 1
-	mob.frame = mob.frame % len(mob.pattern) * mob.moving
+	def get_cell(self, col, row):
+
+		if (col >= 0 and col < self.cols) and (row >= 0 and row < self.rows):
+			return self.cells[self.cols*row+col]
+		else:
+			print("requested column or row does not match the mob's sprite dimensions")
+			pygame.quit()
+			exit()
+
+	def get_centre(self):
 	
-def update(mob): # overridden by classes derived
+		return ((self.x + (self.w / 2)), (self.y + (self.h / 2)))
 
-	mob.base_update()
-	
-def render(mob, surface, x_offset=0, y_offset=0):
+	def move(self, x_axis, y_axis):
 
-	x = (mob.x - mob.x_offset) + x_offset
-	y = (mob.y - mob.y_offset) + y_offset
-	frame = mob.pattern[mob.frame]
-	facing = mob.facings[mob.facing]
-	surface.blit(get_cell(mob, frame, facing), (x,y))
+		x = (not self.collision(x_axis * self.speed, 0)) * (x_axis * self.speed)
+		y = (not self.collision(0, y_axis * self.speed)) * (y_axis * self.speed)
+		self.move_ip(x*self.moving, y*self.moving)
+		if x_axis != 0 or y_axis != 0: self.facing = heading[(x_axis,y_axis)]
 
-def get_cell(mob, col, row):
+	def collision(self, x_axis, y_axis):
 
-	if (col >= 0 and col < mob.cols) and (row >= 0 and row < mob.rows):
-		return mob.cells[mob.cols*row+col]
-	else:
-		print("requested column or row does not match the mob's sprite dimensions")
-		pygame.quit()
-		exit()
+		for c in range(4):
+			xm = ((self.x + x_axis * self.speed) + (c % 2) * self.w)
+			ym = ((self.y + y_axis * self.speed) + int(c / 2) * self.h)
+
+			col = int(xm / self.scene.terrain.tilesize) # is this slow?
+			row = int(ym / self.scene.terrain.tilesize)
+
+			if self.scene.terrain.get_tile("collide", col, row) != "0":
+				return True
+
+		for sprite in self.scene.live_mobs.values():
+			if sprite is not self:
+				xm = self.speed * x_axis + self.x
+				ym = self.speed * y_axis + self.y
+				if sprite.colliderect((xm, ym, self.w, self.h)):
+					return True
+		return False
+		
+	def base_update(self):
+
+		# self.statblock.upkeep()
+		self.moving = bool(self.game.controller.x_axis or self.game.controller.y_axis)	
+		self.frame += self.moving & (self.game.tick % 12 == 0) * 1
+		self.frame = self.frame % len(self.pattern) * self.moving
+		
+	def update(self): # overridden by classes derived
+
+		self.base_update()
+		
+	def render(self, surface, x_offset=0, y_offset=0):
+
+		x = (self.x - self.x_offset) + x_offset
+		y = (self.y - self.y_offset) + y_offset
+		frame = self.pattern[self.frame]
+		facing = self.facings[self.facing]
+		surface.blit(self.get_cell(frame, facing), (x,y))
+		

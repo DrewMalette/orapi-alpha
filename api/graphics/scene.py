@@ -32,7 +32,7 @@ class Scene:
 		
 	def update(self):
 		
-		for mob in self.live_mobs.values():	base_update(mob)
+		for mob in self.live_mobs.values():	mob.base_update()
 		self.game.terrain_renderer.update()
 		
 	def render(self):

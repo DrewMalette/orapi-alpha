@@ -269,7 +269,7 @@ class Terrain_Renderer(pygame.Rect):
 		if self.game.scene.live_mobs: # draw the sprites
 			#for sprite in self.scene.sprites.values():
 			for sprite in utilities.y_sort(self.game.scene.live_mobs.values()):
-				mob.render(sprite, self.game.display, x_offset = -self.x, y_offset = -self.y)
+				sprite.render(self.game.display, x_offset = -self.x, y_offset = -self.y)
 		
 		for row in range(self.rows): # draw the top layer
 			for col in range(self.cols):

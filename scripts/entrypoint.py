@@ -19,7 +19,7 @@ def newgame_init(game):
 	
 def newgame_loop(game):
 
-	api.graphics.move_mob(game.player, game.controller.x_axis, game.controller.y_axis)
+	game.player.move(game.controller.x_axis, game.controller.y_axis)
 	
 	if game.controller.exit: pygame.quit(); exit()	
 
