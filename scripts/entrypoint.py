@@ -15,7 +15,7 @@ def newgame_init(game):
 	
 	game.fader.fade_in()
 	
-	game.segment = newgame_loop # eventually, newgame will not have a loop
+	game.script = newgame_loop # eventually, newgame will not have a loop
 	
 def newgame_loop(game):
 
@@ -34,20 +34,20 @@ def title_init(game): # inits always clear game.obj_stack
 	#game.music_tracks["titletrack"].play()		
 	game.fader.fade_in()
 	
-	game.segment = title_loop
+	game.script = title_loop
 	
 def title_loop(game):
 
 	if game.ui["titleselect"]._returned:
 		if game.ui["titleselect"].value == 0:
 			game.fader.fade_out()
-			game.segment = fade_next
+			game.script = fade_next
 			# game.next_function = something!
 			# game.load_scene()
 		elif game.ui["titleselect"].value == 1:
 			game.music_tracks["titletrack"].fadeout(1000)
 			game.fader.fade_out()
-			game.segment = fade_quit
+			game.script = fade_quit
 		game.ui["titleselect"].visible = False
 
 def start_init(game): # think of a better word than "start"
@@ -63,7 +63,7 @@ def start_init(game): # think of a better word than "start"
 										 "required but is HIGHLY",
 										 "recommended." ]
 	game.ui["dialoguebox"].start()
-	game.segment = start_loop
+	game.script = start_loop
 
 def start_loop(game):
 
@@ -72,7 +72,7 @@ def start_loop(game):
 
 def fade_next(game): # put this in game?
 
-	if game.fader.faded_out: game.segment = start_init
+	if game.fader.faded_out: game.script = start_init
 	
 def fade_quit(game):
 

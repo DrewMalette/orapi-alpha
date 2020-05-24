@@ -24,7 +24,7 @@ class Game:
 		
 		self.obj_stack = [] # either a pygame.Surface or an object with a render method
 		
-		self.segment = None
+		self.script = None
 		self.player = None
 		self.scene = None
 		self.terrain = None
@@ -76,7 +76,7 @@ class Game:
 		for obj in self.obj_stack:
 			if getattr(obj, "update", None):
 				obj.update()
-		self.segment(self) # script
+		self.script(self) # script
 		
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
