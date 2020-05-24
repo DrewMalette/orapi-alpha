@@ -1,11 +1,13 @@
 # entrypoint.py
 
+import os
+
 import pygame
 import api.graphics
 	
 def newgame_init(game):
 
-	game.load_scene("scene1", "content/terrain/cclivrm.tmx")
+	game.load_scene("scene1", os.path.join("content", "terrain", "cclivrm.tmx"))
 	
 	game.obj_stack = []
 	game.obj_stack.append(game.scene)
@@ -81,11 +83,11 @@ def fade_quit(game):
 def run():
 
 	pygame.init()
-	game = api.graphics.Game("content/image/cctitle.png")
+	game = api.graphics.Game(os.path.join("content", "image", "cctitle.png"))
 	game.ui["dialoguebox"] = api.graphics.UI_Dialogue("dialoguebox", game, (170,360), (300,100))
 	game.ui["titleselect"] = api.graphics.UI_Select("titleselect", game, (245,300), (150,54), ["Get Cucked", "Quit to Desktop"])
-	game.music_tracks["titletrack"] = pygame.mixer.Sound("content/sound/ccsong.ogg")
-	game.player = api.graphics.Mob(game, "content/image/jontest.png", "Jon")
+	game.music_tracks["titletrack"] = pygame.mixer.Sound(os.path.join("content", "sound", "ccsong.ogg"))
+	game.player = api.graphics.Mob(game, os.path.join("content", "image", "jontest.png"), "Jon")
 	title_init(game)
 	game.main()
 

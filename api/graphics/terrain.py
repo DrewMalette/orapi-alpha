@@ -1,3 +1,4 @@
+import os
 import xml.etree.ElementTree as ET
 
 import pygame
@@ -15,8 +16,8 @@ class Tileset:
 		self.textures = {}
 		
 	def update(self, filename, firstgid=1):
-	
-		textures = utilities.load_tileset("content/terrain/"+filename, self.width, self.height, firstgid)
+		
+		textures = utilities.load_tileset(os.path.join("content", "terrain", filename), self.width, self.height, firstgid)
 		self.textures.update(textures)
 				
 	def __getitem__(self, key=-1):
@@ -59,7 +60,7 @@ class Terrain:
 		
 		for tilesettag in root.iter("tileset"):
 			filename = tilesettag.attrib["source"]
-			tilestree = ET.parse("content/terrain/"+filename)
+			tilestree = ET.parse(os.path.join("content", "terrain", filename))
 			tilesroot = tilestree.getroot()
 			for tileset in tilesroot.iter("tileset"):
 				for i in tileset.iter("image"):
