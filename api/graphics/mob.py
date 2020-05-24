@@ -69,8 +69,8 @@ class Mob(pygame.Rect): # incarnation of the 'Sprite' concept
 		
 	def place(self, col, row):
 		
-		self.x = col * self.scene.tilesize + (self.scene.tilesize - self.w) / 2
-		self.y = row * self.scene.tilesize + (self.scene.tilesize - self.h) - 4
+		self.x = col * self.scene.terrain.tilesize + (self.scene.terrain.tilesize - self.w) / 2
+		self.y = row * self.scene.terrain.tilesize + (self.scene.terrain.tilesize - self.h) - 4
 
 	def get_cell(self, col, row):
 

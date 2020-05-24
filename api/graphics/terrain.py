@@ -98,7 +98,7 @@ class Terrain:
 						exit()
 					self.scene.live_mobs["player"] = engine.player
 					self.scene.live_mobs["player"].scene = self.scene
-					utilities.place(self.scene.live_mobs["player"], col, row, self)
+					self.scene.live_mobs["player"].place(col, row)
 				elif rectattribs["type"] == "switch":
 					x = int(float(rectattribs["x"]) / self.tilewidth) * self.tilewidth
 					y = int(float(rectattribs["y"]) / self.tileheight) * self.tileheight

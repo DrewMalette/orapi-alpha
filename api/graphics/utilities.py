@@ -4,11 +4,6 @@ import pygame
 
 y_sort = lambda mob_list: sorted(mob_list, key=operator.attrgetter('y'))
 
-def place(mob, col, row, terrain):
-		
-	mob.x = col * terrain.tilesize + (terrain.tilesize - mob.w) / 2
-	mob.y = row * terrain.tilesize + (terrain.tilesize - mob.h) - 4
-
 def load_image(filename, colourkey=None):
 
 	try:
