@@ -15,7 +15,7 @@ class Game:
 		pygame.display.set_caption("open rhombus")
 		self.display = pygame.display.set_mode(self.display_size)
 		self.fader = Fader(self, self.display.get_size())
-		self.terrain_renderer = Terrain_Renderer("terrend", self)
+		self.renderer = Renderer("renderer", self)
 		
 		self.controller = Keyboard(self)
 				
@@ -42,19 +42,19 @@ class Game:
 	def load_scene(self, uid, terfile):
 		
 		self.scene = scene.Scene(uid, self, terfile)
-		self.terrain_renderer.scene = self.scene
-		self.terrain_renderer.following = self.player
+		self.renderer.scene = self.scene
+		self.renderer.following = self.player
 		# assumes the tile is square
-		self.terrain_renderer.tilesize = self.scene.terrain.tilewidth
-		self.terrain_renderer.cols = int(self.terrain_renderer.w / self.scene.terrain.tilesize + 2)
-		self.terrain_renderer.rows = int(self.terrain_renderer.h / self.scene.terrain.tilesize + 2)
-		self.terrain_renderer.blank = pygame.Surface((self.scene.terrain.tilesize,self.scene.terrain.tilesize)).convert()
-		self.terrain_renderer.blank.fill((0,0,0))
+		self.renderer.tilesize = self.scene.terrain.tilewidth
+		self.renderer.cols = int(self.renderer.w / self.scene.terrain.tilesize + 2)
+		self.renderer.rows = int(self.renderer.h / self.scene.terrain.tilesize + 2)
+		self.renderer.blank = pygame.Surface((self.scene.terrain.tilesize,self.scene.terrain.tilesize)).convert()
+		self.renderer.blank.fill((0,0,0))
 		
 		#self.controller.flush()
 		self.player.moving = False
 		#self.sprites["player"].facing = "south" TODO put this somewhere else (like in a gamestate)
-		self.terrain_renderer.update()		
+		self.renderer.update()		
 	
 	def main(self):
 	
@@ -178,7 +178,7 @@ class Keyboard(Controller):
 		if self.y_axis == 0 and self.y_pressed:
 			self.y_pressed = False
 
-class Terrain_Renderer(pygame.Rect):
+class Renderer(pygame.Rect):
 
 	def __init__(self, uid, game, x=0, y=0):
 	
@@ -214,7 +214,7 @@ class Terrain_Renderer(pygame.Rect):
 			
 	def update(self):
 	
-		x,y = self.following.get_centre()
+		x,y = self.following.center
 		
 		if x > self.w / 2:
 			self.x = x - self.w / 2

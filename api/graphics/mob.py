@@ -81,10 +81,6 @@ class Mob(pygame.Rect): # incarnation of the 'Sprite' concept
 			pygame.quit()
 			exit()
 
-	def get_centre(self):
-	
-		return ((self.x + (self.w / 2)), (self.y + (self.h / 2)))
-
 	def move(self, x_axis, y_axis):
 
 		x = (not self.collision(x_axis * self.speed, 0)) * (x_axis * self.speed)

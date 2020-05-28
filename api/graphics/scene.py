@@ -1,12 +1,5 @@
 # media/input, mechanics, file handling
 
-# i'm moving into an era where i'm replacing if statements
-#  with boolean multiplication (where possible)
-# tl;dr i'm replacing conditionals with boolean based calculations
-# create the object within the Game object?
-# create a Dialogue box then access it?
-# then they need uids again
-
 from .mob import *
 from .terrain import *
 
@@ -33,9 +26,9 @@ class Scene:
 	def update(self):
 		
 		for mob in self.live_mobs.values():	mob.base_update()
-		self.game.terrain_renderer.update()
+		self.game.renderer.update()
 		
 	def render(self):
 	
-		self.game.terrain_renderer.render()
+		self.game.renderer.render()
 
