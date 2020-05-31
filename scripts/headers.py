@@ -1,12 +1,12 @@
 # headers.py
 
 import pygame
-import api.graphics
+import engine.core
 
 def dialogue_init(game, text_list):
 
-	game.obj_stack = []
-	game.obj_stack.append(game.terrain_renderer)
+	#game.obj_stack = []
+	#game.obj_stack.append(game.renderer)
 	game.obj_stack.append(game.ui["dialoguebox"])
 	
 	game.ui["dialoguebox"].text_list = text_list
@@ -28,4 +28,4 @@ def gameplay_loop(game):
 	if game.controller.xs_button: menu_init(game)
 
 	game.scene.update()
-	game.terrain_renderer.update()
+	game.renderer.update()
