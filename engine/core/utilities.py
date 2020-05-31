@@ -1,8 +1,5 @@
-import operator
 
 import pygame
-
-y_sort = lambda mob_list: sorted(mob_list, key=operator.attrgetter('y'))
 
 def load_image(filename, colourkey=None):
 

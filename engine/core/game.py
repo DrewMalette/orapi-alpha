@@ -1,3 +1,5 @@
+import operator
+
 import pygame
 
 from . import mob
@@ -212,6 +214,8 @@ class Renderer(pygame.Rect):
 			return (tile, x, y)
 		else:			
 			return ("0", x, y)
+	
+	def y_sort(self): return sorted(self.game.scene.live_mobs.values(), key=operator.attrgetter('y'))
 			
 	def update(self):
 	
@@ -269,7 +273,7 @@ class Renderer(pygame.Rect):
 
 		if self.game.scene.live_mobs: # draw the sprites
 			#for sprite in self.scene.sprites.values():
-			for sprite in utilities.y_sort(self.game.scene.live_mobs.values()):
+			for sprite in self.y_sort():
 				sprite.render(self.game.display, x_offset = -self.x, y_offset = -self.y)
 		
 		for row in range(self.rows): # draw the top layer
