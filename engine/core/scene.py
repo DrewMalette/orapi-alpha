@@ -129,8 +129,9 @@ class Scene:
 			
 	def update(self):
 		
-		for mob in self.live_mobs.values():	mob.base_update()
-		self.game.renderer.update()
+		if not self.game.fader.fading:
+			for mob in self.live_mobs.values():	mob.base_update()
+			self.game.renderer.update()
 		
 	def render(self):
 	

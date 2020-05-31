@@ -32,11 +32,6 @@ class Game:
 		self.ui_font = pygame.font.Font(None, 24)
 		self.title_card = pygame.image.load(title_image_file)
 		self.music_tracks = {}
-		
-	def switch_state(self, state_uid): # load and start
-	
-		self.state = state_uid
-		self.states[self.state].start()
 
 	def load_scene(self, uid, map_filename):
 		
@@ -62,9 +57,16 @@ class Game:
 		while self.running:
 			self.update()
 			self.render()
+
+	def exit(self, _):
 			
 		pygame.quit()
 		exit()
+
+	def fade_loop(self, _):
+	
+		if _.fader.faded_out or _.fader.faded_in:
+			_.script = _.next_script
 
 	def update(self):
 	
@@ -298,6 +300,7 @@ class Fader: # TODO make a white version
 		self.curtain.set_alpha(self.opacity)
 		self.fading = True
 		self.velocity = self.speed
+		self.game.script = self.game.fade_loop
 		
 	def fade_in(self, speed=6):
 		
@@ -306,7 +309,8 @@ class Fader: # TODO make a white version
 		self.curtain.set_alpha(self.opacity)
 		self.fading = True
 		self.velocity = -self.speed
-				
+		self.game.script = self.game.fade_loop
+		
 	def update(self):
 	
 		if self.faded_in: self.faded_in = False
