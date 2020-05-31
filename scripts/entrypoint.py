@@ -50,7 +50,7 @@ def title_loop(game):
 			game.fader.fade_out()
 		game.ui["titleselect"].visible = False
 
-def run():
+def init():
 
 	pygame.init()
 	game = engine.core.Game(os.path.join(filepaths.image_path, "cctitle.png"))

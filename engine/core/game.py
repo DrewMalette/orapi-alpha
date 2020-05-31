@@ -11,7 +11,7 @@ class Game:
 
 	def __init__(self, title_image_file):
 	
-		pygame.display.set_caption("open rhombus")
+		pygame.display.set_caption("engine demo")
 		self.display = pygame.display.set_mode(self.display_size)
 		self.fader = Fader(self, self.display.get_size())
 		self.renderer = Renderer("renderer", self)

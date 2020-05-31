@@ -7,5 +7,5 @@ import importlib
 
 entrypoint = importlib.import_module("scripts.entrypoint")
 
-entrypoint.run()
+entrypoint.init()
 
