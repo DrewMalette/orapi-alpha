@@ -26,6 +26,3 @@ def gameplay_loop(game):
 
 	if game.controller.as_button: interact_init(game)
 	if game.controller.xs_button: menu_init(game)
-
-	game.scene.update()
-	game.renderer.update()
