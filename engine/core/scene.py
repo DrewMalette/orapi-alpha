@@ -1,41 +1,29 @@
+# media/input, mechanics, file handling
+
 import os
 import xml.etree.ElementTree as ET
 
-import pygame
+from .mob import Mob
+from .tileset import Tileset
+from . import filepaths
 
-from . import mob
-from . import utilities
+class Scene:
 
-class Tileset:
+	def __init__(self, uid, game, map_filename):
 
-	def __init__(self, width, height):
-	
-		self.width = height
-		self.height = height
-					
-		self.textures = {}
+		self.uid = uid
+		self.game = game
 		
-	def update(self, filename, firstgid=1):
+		self.mobs = {}
+		self.live_mobs = {}
 		
-		textures = utilities.load_tileset(os.path.join("content", "terrain", filename), self.width, self.height, firstgid)
-		self.textures.update(textures)
-				
-	def __getitem__(self, key=-1):
-	
-		if key is -1:
-			return self.textures
-		if key is not -1:
-			return self.textures[key]
-			
-class Terrain:
-
-	def __init__(self, filename, engine, scene):
-
-		self.uid = filename
-		self.scene = scene
-		self.scene.terrain = self
+		self.buildings = {}
+		self.furniture = {}
+		self.loot = {}
 		
-		tree = ET.parse(self.uid)
+		#self.uid = filename
+		
+		tree = ET.parse(map_filename)
 		root = tree.getroot()
 		
 		self.cols = int(root.attrib["width"])
@@ -60,7 +48,7 @@ class Terrain:
 		
 		for tilesettag in root.iter("tileset"):
 			filename = tilesettag.attrib["source"]
-			tilestree = ET.parse(os.path.join("content", "terrain", filename))
+			tilestree = ET.parse(os.path.join(filepaths.scene_path, filename))
 			tilesroot = tilestree.getroot()
 			for tileset in tilesroot.iter("tileset"):
 				for i in tileset.iter("image"):
@@ -92,14 +80,14 @@ class Terrain:
 				col = int(float(rectattribs["x"]) / self.tilewidth)
 				row = int(float(rectattribs["y"]) / self.tileheight)
 				if rectattribs["type"] == "player":
-					if engine.player is None: # move this to engine
+					if self.game.player is None:
 						print("player object is not defined")
 						print("exiting")
 						pygame.quit()
 						exit()
-					self.scene.live_mobs["player"] = engine.player
-					self.scene.live_mobs["player"].scene = self.scene
-					self.scene.live_mobs["player"].place(col, row)
+					self.live_mobs["player"] = self.game.player
+					self.live_mobs["player"].scene = self
+					self.live_mobs["player"].place(col, row)
 				elif rectattribs["type"] == "switch":
 					x = int(float(rectattribs["x"]) / self.tilewidth) * self.tilewidth
 					y = int(float(rectattribs["y"]) / self.tileheight) * self.tileheight
@@ -112,9 +100,9 @@ class Terrain:
 						#print("defaulting to map defined placement position")
 						self.switches[uid] = [pygame.Rect((x,y,self.tilewidth,self.tileheight)), rectattribs["Filename"], None, facing]
 				elif rectattribs["type"] == "mob":
-					self.scene.live_mobs[uid] = mob.Mob("content/image/" + rectattribs["Filename"], rectattribs["name"])
-					self.scene.live_mobs[uid].scene = self.scene
-					utilities.place(self.scene.live_mobs[uid], col, row, self)
+					self.live_mobs[uid] = mob.Mob("content/image/" + rectattribs["Filename"], rectattribs["name"])
+					self.live_mobs[uid].scene = self
+					utilities.place(self.live_mobs[uid], col, row, self)
 				#elif rectattribs["type"] == "static":
 				#	filepath = "content/image/" + rectattribs["Filename"]
 				#	name = rectattribs["name"]
@@ -122,11 +110,6 @@ class Terrain:
 				#	self.sprites[uid].scene = self
 				#	self.sprites[uid].place(col,row)
 
-	def get_tile(self, layername, col, row):
-	
-		index = int((row % self.rows) * self.cols + (col % self.cols))
-		return self.layerdata[layername][index]
-		
 	def add_loot(self, filename, x, y):
 	
 		uid = self.loot_count
@@ -134,3 +117,22 @@ class Terrain:
 		py = y - 20
 		self.loot[self.loot_count] = sprite.Loot(self, uid, filename, (px,py))
 		self.loot_count = (self.loot_count + 1) % 256
+		
+	def add_mob(self, mob):
+	
+		self.mobs[mob.name] = mob
+	
+	def get_tile(self, layername, col, row):
+	
+		index = int((row % self.rows) * self.cols + (col % self.cols))
+		return self.layerdata[layername][index]
+			
+	def update(self):
+		
+		for mob in self.live_mobs.values():	mob.base_update()
+		self.game.renderer.update()
+		
+	def render(self):
+	
+		self.game.renderer.render()
+

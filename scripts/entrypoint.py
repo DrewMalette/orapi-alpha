@@ -3,11 +3,12 @@
 import os
 
 import pygame
-import api.graphics
+import engine.core
+from engine.core import filepaths
 	
 def newgame_init(game):
 
-	game.load_scene("scene1", os.path.join("content", "terrain", "cclivrm.tmx"))
+	game.load_scene("scene1", os.path.join(filepaths.scene_path, "cclivrm.tmx"))
 	
 	game.obj_stack = []
 	game.obj_stack.append(game.scene)
@@ -73,10 +74,10 @@ def fadeout_loop(game):
 def run():
 
 	pygame.init()
-	game = api.graphics.Game(os.path.join("content", "image", "cctitle.png"))
-	game.ui["dialoguebox"] = api.graphics.UI_Dialogue("dialoguebox", game, (170,360), (300,100))
-	game.ui["titleselect"] = api.graphics.UI_Select("titleselect", game, (245,300), (150,54), ["New Game", "Quit to Desktop"])
-	game.player = api.graphics.Mob(game, os.path.join("content", "image", "jontest.png"), "Jon")
+	game = engine.core.Game(os.path.join("content", "image", "cctitle.png"))
+	game.ui["dialoguebox"] = engine.core.UI_Dialogue("dialoguebox", game, (170,360), (300,100))
+	game.ui["titleselect"] = engine.core.UI_Select("titleselect", game, (245,300), (150,54), ["New Game", "Quit to Desktop"])
+	game.player = engine.core.Mob(game, os.path.join("content", "image", "jontest.png"), "Jon")
 	title_init(game)
 	game.main()
 

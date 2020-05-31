@@ -2,7 +2,6 @@ import pygame
 
 from . import mob
 from . import scene
-from . import terrain
 from . import utilities
 
 class Game:
@@ -25,9 +24,9 @@ class Game:
 		self.obj_stack = [] # either a pygame.Surface or an object with a render method
 		
 		self.script = None
+		self.next_script = None # will it ever be used internally?
 		self.player = None
 		self.scene = None
-		self.terrain = None
 		
 		self.ui = {}
 		self.ui_font = pygame.font.Font(None, 24)
@@ -39,16 +38,16 @@ class Game:
 		self.state = state_uid
 		self.states[self.state].start()
 
-	def load_scene(self, uid, terfile):
+	def load_scene(self, uid, map_filename):
 		
-		self.scene = scene.Scene(uid, self, terfile)
+		self.scene = scene.Scene(uid, self, map_filename)
 		self.renderer.scene = self.scene
 		self.renderer.following = self.player
 		# assumes the tile is square
-		self.renderer.tilesize = self.scene.terrain.tilewidth
-		self.renderer.cols = int(self.renderer.w / self.scene.terrain.tilesize + 2)
-		self.renderer.rows = int(self.renderer.h / self.scene.terrain.tilesize + 2)
-		self.renderer.blank = pygame.Surface((self.scene.terrain.tilesize,self.scene.terrain.tilesize)).convert()
+		self.renderer.tilesize = self.scene.tilewidth
+		self.renderer.cols = int(self.renderer.w / self.scene.tilesize + 2)
+		self.renderer.rows = int(self.renderer.h / self.scene.tilesize + 2)
+		self.renderer.blank = pygame.Surface((self.scene.tilesize,self.scene.tilesize)).convert()
 		self.renderer.blank.fill((0,0,0))
 		
 		#self.controller.flush()
@@ -201,13 +200,13 @@ class Renderer(pygame.Rect):
 		c_index = int(self.x / self.tilesize + col)
 		r_index = int(self.y / self.tilesize + row)
 	
-		index = self.scene.terrain.get_tile(layer, c_index, r_index)
+		index = self.scene.get_tile(layer, c_index, r_index)
 
 		x = col * self.tilesize - x_offset
 		y = row * self.tilesize - y_offset
 		
 		if index != "0":
-			tile = self.scene.terrain.tileset[index]
+			tile = self.scene.tileset[index]
 			return (tile, x, y)
 		else:			
 			return ("0", x, y)
@@ -226,13 +225,13 @@ class Renderer(pygame.Rect):
 		elif y <= self.h / 2:
 			self.y = 0
 	
-		if self.x + self.w > self.game.scene.terrain.cols * self.tilesize:
-			self.x = self.game.scene.terrain.cols * self.tilesize - self.w
+		if self.x + self.w > self.game.scene.cols * self.tilesize:
+			self.x = self.game.scene.cols * self.tilesize - self.w
 		elif self.x < 0:
 			self.x = 0
 			
-		if self.y + self.h > self.game.scene.terrain.rows * self.tilesize:
-			self.y = self.game.scene.terrain.rows * self.tilesize - self.h
+		if self.y + self.h > self.game.scene.rows * self.tilesize:
+			self.y = self.game.scene.rows * self.tilesize - self.h
 		elif self.y < 0:
 			self.y = 0
 				
@@ -246,20 +245,20 @@ class Renderer(pygame.Rect):
 				c_index = int(self.x / self.tilesize + col)
 				r_index = int(self.y / self.tilesize + row)
 		
-				bottom_i = self.scene.terrain.get_tile("bottom", c_index, r_index)
-				middle_i = self.scene.terrain.get_tile("middle", c_index, r_index)
+				bottom_i = self.scene.get_tile("bottom", c_index, r_index)
+				middle_i = self.scene.get_tile("middle", c_index, r_index)
 
 				c = col * self.tilesize - x_offset
 				r = row * self.tilesize - y_offset
 				
 				if bottom_i != "0":
-					bottom_t = self.scene.terrain.tileset[bottom_i]
+					bottom_t = self.scene.tileset[bottom_i]
 					self.game.display.blit(bottom_t, (c,r))
 				elif bottom_i == "0":
 					self.game.display.blit(self.blank, (c,r))
 
 				if middle_i != "0":
-					middle_t = self.scene.terrain.tileset[middle_i]
+					middle_t = self.scene.tileset[middle_i]
 					self.game.display.blit(middle_t, (c,r))
 
 		#if self.scene.loot: # TODO merge this with sprites for the y_sort

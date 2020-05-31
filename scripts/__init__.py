@@ -2,5 +2,5 @@
 
 # the default script the application will look for
 from . import entrypoint
-from . import entrytemplate
+#from . import entrytemplate
 

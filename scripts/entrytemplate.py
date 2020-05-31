@@ -1,7 +1,7 @@
 # entrytemplate.py
 
 import pygame
-import api
+import engine
 
 # put segment functions here
 def segment_template(scene):
@@ -23,11 +23,11 @@ def run():
 	globs = globals()
 	for g in globs: print(g, globs[g])
 
-	game = api.graphics.Game()
+	game = engine.graphics.Game()
 	# define title image and ui components here
 	
 	# define your player
-	game.player = api.graphics.Mob(game, image, uid)
+	game.player = engine.graphics.Mob(game, image, uid)
 	# load up a scene; TODO need a reset function for a scene
 	game.load_scene(name_the_scene, segments, mapfile, segment_string)
 	# switch game state to the title card

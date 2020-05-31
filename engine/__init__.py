@@ -1,3 +1,3 @@
-from . import graphics
+from . import core
 #from . import mechanics
 
