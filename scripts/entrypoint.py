@@ -14,6 +14,7 @@ def newgame_init(game):
 	game.obj_stack.append(game.scene)
 	game.obj_stack.append(game.fader)
 	
+	game.player.facing = "south"
 	game.renderer.following = game.player
 	
 	game.next_script = newgame_loop # eventually newgame will not have a loop
@@ -23,14 +24,14 @@ def newgame_loop(game):
 
 	game.player.move(game.controller.x_axis, game.controller.y_axis)
 	
-	if game.controller.exit: pygame.quit(); exit()
+	if game.controller.exit: game.next_script = title_init; game.fader.fade_out()
 
 def title_init(game): # inits always clear game.obj_stack
 
 	game.obj_stack = []
 	game.obj_stack.append(game.title_card)
-	game.obj_stack.append(game.fader)
 	game.obj_stack.append(game.ui["titleselect"])
+	game.obj_stack.append(game.fader)
 		
 	game.ui["titleselect"].start()
 	
